@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Ads</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            margin: 30px auto;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .add-ad {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            text-align: center;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: fit-content;
+        }
+
+        .add-ad:hover {
+            background-color: #218838;
+        }
+
+        .ad-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-card img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .ad-details {
+            flex-grow: 1;
+        }
+
+        .ad-details h3 {
+            margin: 0 0 10px;
+            font-size: 1.5em;
+        }
+
+        .ad-details p {
+            margin: 5px 0;
+        }
+
+        .ad-details .price {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
+            <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>My Ads</h1>
+    </header>
+    <div class="container">
+        <a class="add-ad" href="{{ url_for('listing_routes.select_vehicle_type') }}">Create New Ad</a>
+        {% if listings %}
+            {% for ad in listings %}
+            <div class="ad-card">
+                <img src="{{ ad.photo_url if ad.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
+                <div class="ad-details">
+                    <h3>{{ ad.title }}</h3>
+                    <p>{{ ad.description }}</p>
+                    <p class="price">Price: ${{ ad.price }}</p>
+                    <p>Vehicle: {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
+                </div>
+                <div class="actions">
+                    <a href="#">Edit</a>
+                    <a href="{{ url_for('listing_routes.confirm_delete', ad_id=ad.ad_id) }}" style="background-color: red; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px;">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <p>No ads found. Create your first ad!</p>
+        {% endif %}
+    </div>
+</body>
+</html>
