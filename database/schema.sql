@@ -26,10 +26,11 @@ CREATE TABLE Vehicle (
     km INT,
     HP INT,
     cc INT,
+    engine_size INT,
     drivetrain VARCHAR(50),
     color VARCHAR(50),
     guarantee BOOLEAN,
-    car_condition ENUM('heavily damaged', 'damaged', 'no damage'),
+    vehicle_condition ENUM('new', 'used', 'heavily damaged', 'damaged', 'no damage') NOT NULL DEFAULT 'used',
     plate VARCHAR(20)
 );
 
@@ -45,6 +46,57 @@ CREATE TABLE VehicleAd (
     seller_id INT NOT NULL,
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE,
     FOREIGN KEY (seller_id) REFERENCES User(user_id) ON DELETE CASCADE
+);
+
+-- Create `Car` table
+CREATE TABLE Car (
+    car_id INT AUTO_INCREMENT PRIMARY KEY,
+    body_style VARCHAR(50),
+    door_count INT CHECK(door_count > 0),
+    infotainment_screen BOOLEAN,
+    ac BOOLEAN,
+    emission_standard VARCHAR(50),
+    airbags_count INT CHECK(airbags_count > 0),
+    lane_assist BOOLEAN,
+    abs BOOLEAN,
+    vehicle_id INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
+);
+
+-- Create `Motorcycle` table
+CREATE TABLE Motorcycle (
+    motorcycle_id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('sport', 'cruiser', 'touring', 'enduro', 'scooter', 'dirt') NOT NULL,
+    abs BOOLEAN DEFAULT FALSE,
+    vehicle_id INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
+);
+
+-- Create `Van` table
+CREATE TABLE Van (
+    van_id INT AUTO_INCREMENT PRIMARY KEY,
+    cargo_capacity INT NOT NULL,
+    cargo_length INT,
+    cargo_width INT,
+    cargo_height INT,
+    max_payload INT,
+    seating_config VARCHAR(50),
+    sliding_doors BOOLEAN,
+    removable_seats BOOLEAN,
+    roof_height DECIMAL(10, 2) CHECK(roof_height > 0),
+    van_type VARCHAR(50),
+    vehicle_id INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
+);
+
+-- Create `Photo` table
+CREATE TABLE Photo (
+    p_id INT AUTO_INCREMENT PRIMARY KEY,
+    height INT,
+    width INT,
+    content VARCHAR(255) NOT NULL,
+    vehicle_id INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
 -- Create `AdminAction` table
@@ -89,7 +141,7 @@ CREATE TABLE SearchPreference (
     drivetrain VARCHAR(50) NOT NULL,
     color VARCHAR(50) NOT NULL,
     guarantee BOOLEAN NOT NULL,
-    car_condition ENUM('heavily damaged', 'damaged', 'no damage'),
+    vehicle_condition ENUM('new', 'used', 'heavily damaged', 'damaged', 'no damage'),
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
@@ -99,52 +151,6 @@ CREATE TABLE SearchPreference (
 CREATE TABLE ExpertReport (
     w_id INT AUTO_INCREMENT PRIMARY KEY,
     content LONGBLOB NOT NULL,
-    vehicle_id INT NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
-);
-
--- Create `Photo` table
-CREATE TABLE Photo (
-    p_id INT AUTO_INCREMENT PRIMARY KEY,
-    height INT,
-    width INT,
-    content VARCHAR(255) NOT NULL,
-    vehicle_id INT NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
-);
-
--- Create `Car` table
-CREATE TABLE Car (
-    body_style VARCHAR(50),
-    door_count INT CHECK(door_count > 0),
-    infotainment_screen BOOLEAN,
-    ac BOOLEAN,
-    emission_standard VARCHAR(50),
-    airbags_count INT CHECK(airbags_count > 0),
-    lane_assist BOOLEAN,
-    abs BOOLEAN,
-    vehicle_id INT NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
-);
-
--- Create `Bike` table
-CREATE TABLE Bike (
-    bike_type VARCHAR(50),
-    frame_material VARCHAR(50),
-    saddle_height DECIMAL(10, 2) CHECK(saddle_height > 0),
-    handlebar_type VARCHAR(50),
-    vehicle_id INT NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
-);
-
--- Create `Van` table
-CREATE TABLE Van (
-    seating_config VARCHAR(50),
-    sliding_doors BOOLEAN,
-    cargo_volume DECIMAL(10, 2) CHECK(cargo_volume > 0),
-    removable_seats BOOLEAN,
-    roof_height DECIMAL(10, 2) CHECK(roof_height > 0),
-    van_type VARCHAR(50),
     vehicle_id INT NOT NULL,
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
@@ -238,3 +244,14 @@ CREATE TABLE Wallet (
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+-- Create indexes for better query performance
+CREATE INDEX idx_vehicle_condition ON Vehicle(vehicle_condition);
+CREATE INDEX idx_vehicle_type ON Vehicle(vehicle_id);
+CREATE INDEX idx_motorcycle_type ON Motorcycle(type);
+CREATE INDEX idx_van_capacity ON Van(cargo_capacity);
+CREATE INDEX idx_vehicle_brand ON Vehicle(brand);
+CREATE INDEX idx_vehicle_year ON Vehicle(year);
+CREATE INDEX idx_ad_status ON VehicleAd(status);
+CREATE INDEX idx_ad_price ON VehicleAd(price);
+CREATE INDEX idx_ad_created ON VehicleAd(created_at);
