@@ -1,127 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Register</title>
-    <style>
-        /* General Page Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-            text-align: center;
-        }
+{% extends "base.html" %}
 
-        header {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-        }
+{% block title %}Register{% endblock %}
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        .container {
-            margin: 50px auto;
-            max-width: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .container h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        form {
-            text-align: left;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        form button {
-            width: 100%;
-            padding: 15px;
-            font-size: 1em;
-            font-weight: bold;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        form button:hover {
-            background-color: #0056b3;
-        }
-
-        .login-link {
-            margin-top: 20px;
-        }
-
-        .login-link a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Register</h1>
-    </header>
-    <div class="container">
-        <h2>Create an Account</h2>
-        <form method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required>
-            
-            <button type="submit">Register</button>
-        </form>
-        <div class="login-link">
-            <p>Already have an account? <a href="{{ url_for('auth_routes.login') }}">Login here</a>.</p>
-        </div>
+{% block content %}
+<div class="register-container">
+    <h2>Create an Account</h2>
+    <form method="POST" class="register-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your password" required>
+        
+        <button type="submit">Register</button>
+    </form>
+    <div class="login-link">
+        <p>Already have an account? <a href="{{ url_for('auth_routes.login') }}">Login here</a></p>
     </div>
-    <footer>
-        <p>© 2024 Your Application. All Rights Reserved.</p>
-    </footer>
-</body>
-</html>
+</div>
+{% endblock %}

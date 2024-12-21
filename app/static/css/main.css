@@ -1,0 +1,12 @@
+@import url('general.css');
+@import url('navbar.css');
+@import url('footer.css');
+@import url('auth.css');
+@import url('home.css');
+@import url('listings.css');
+@import url('dashboard.css');
+@import url('edit_profile');
+@import url('select_vehicle_type.css');
+@import url('list_car_ad.css');
+@import url('list_motorcycle_ad.css');
+@import url('list_van_ad.css');

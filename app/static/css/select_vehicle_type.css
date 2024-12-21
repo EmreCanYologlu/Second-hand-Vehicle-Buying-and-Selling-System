@@ -1,0 +1,48 @@
+/* Vehicle Selection Container */
+.vehicle-select-container {
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Wrap buttons for smaller screens */
+    gap: 15px; /* Add spacing between buttons */
+    margin-bottom: 20px;
+}
+
+/* Vehicle Button Styles */
+.vehicle-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #007BFF; /* Primary blue color */
+    border-radius: 5px;
+    text-decoration: none; /* Remove underline */
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.vehicle-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Back Button Styling */
+.back-button .vehicle-button {
+    background-color: #242288; /* Neutral gray for back button */
+}
+
+.back-button .vehicle-button:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+}

@@ -1,119 +1,98 @@
-<!-- list_motorcycle_ad.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Create Motorcycle Ad</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-        .form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .checkbox-group {
-            margin: 10px 0;
-        }
-        .submit-btn {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .submit-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <h1>Create Motorcycle Ad</h1>
-        <form action="{{ url_for('listing_routes.create_motorcycle') }}" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="price">Price ($)</label>
-                <input type="number" id="price" name="price" required>
-            </div>
-            <div class="form-group">
-                <label for="brand">Brand</label>
-                <input type="text" id="brand" name="brand" required>
-            </div>
-            <div class="form-group">
-                <label for="model">Model</label>
-                <input type="text" id="model" name="model" required>
-            </div>
-            <div class="form-group">
-                <label for="year">Year</label>
-                <input type="number" id="year" name="year" required>
-            </div>
-            <div class="form-group">
-                <label for="type">Type</label>
-                <select id="type" name="type" required>
-                    <option value="sport">Sport</option>
-                    <option value="cruiser">Cruiser</option>
-                    <option value="touring">Touring</option>
-                    <option value="enduro">Enduro</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="engine_size">Engine Size (cc)</label>
-                <input type="number" id="engine_size" name="engine_size" required>
-            </div>
-            <div class="form-group">
-                <label for="km">Mileage (km)</label>
-                <input type="number" id="km" name="km" required>
-            </div>
-            <div class="form-group">
-                <label for="color">Color</label>
-                <input type="text" id="color" name="color" required>
-            </div>
-            <div class="form-group">
-                <label for="condition">Condition</label>
-                <select id="condition" name="condition" required>
-                    <option value="new">New</option>
-                    <option value="used">Used</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="photos">Photos</label>
-                <input type="file" id="photos" name="photos" accept="image/*" required>
-            </div>
-            <button type="submit" class="submit-btn">Create Ad</button>
-        </form>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Create Motorcycle Ad{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Create Motorcycle Ad</h1>
+    <form action="{{ url_for('ad_routes.create_motorcycle') }}" method="POST" enctype="multipart/form-data">
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter a title for the ad" required>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Enter a description" required></textarea>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+            <label for="price">Price ($)</label>
+            <input type="number" id="price" name="price" placeholder="Enter the price" required>
+        </div>
+
+        <!-- Brand -->
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" placeholder="Enter the motorcycle brand" required>
+        </div>
+
+        <!-- Model -->
+        <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="model" placeholder="Enter the motorcycle model" required>
+        </div>
+
+        <!-- Year -->
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" placeholder="Enter the manufacturing year" required>
+        </div>
+
+        <!-- Type -->
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select id="type" name="type" required>
+                <option value="" disabled selected>Select type</option>
+                <option value="sport">Sport</option>
+                <option value="cruiser">Cruiser</option>
+                <option value="touring">Touring</option>
+                <option value="enduro">Enduro</option>
+            </select>
+        </div>
+
+        <!-- Engine Size -->
+        <div class="form-group">
+            <label for="engine_size">Engine Size (cc)</label>
+            <input type="number" id="engine_size" name="engine_size" placeholder="Enter engine size in cc" required>
+        </div>
+
+        <!-- Mileage -->
+        <div class="form-group">
+            <label for="km">Mileage (km)</label>
+            <input type="number" id="km" name="km" placeholder="Enter mileage" required>
+        </div>
+
+        <!-- Color -->
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color" placeholder="Enter the color" required>
+        </div>
+
+        <!-- Condition -->
+        <div class="form-group">
+            <label for="condition">Condition</label>
+            <select id="condition" name="condition" required>
+                <option value="" disabled selected>Select condition</option>
+                <option value="new">New</option>
+                <option value="used">Used</option>
+            </select>
+        </div>
+
+        <!-- Upload Photos -->
+        <h3>Upload Photos</h3>
+        <div class="form-group">
+            <label for="photos">Car Photos (Max size: 5MB each)</label>
+            <input type="file" id="photos" name="photos" accept="image/*" multiple required>
+            <p class="help-text">You can upload multiple photos. Hold down Ctrl (Cmd on Mac) to select multiple files.</p>
+        </div>
+
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Create Ad</button>
+    </form>
+</div>
+{% endblock %}

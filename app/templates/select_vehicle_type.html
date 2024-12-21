@@ -1,81 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Create Ad - Select Vehicle Type</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
+{% extends "base.html" %}
 
-        h1 {
-            margin-top: 50px;
-        }
+{% block title %}Create Ad - Select Vehicle Type{% endblock %}
 
-        .button-group {
-            margin-top: 30px;
-        }
-
-        .button-group a {
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .back-button {
-            display: block;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        .back-button a {
-            text-decoration: none;
-        }
-
-        .back-button button {
-            background-color: #28a745;
-        }
-
-        .back-button button:hover {
-            background-color: #218838;
-        }
-    </style>
-</head>
-<body>
+{% block content %}
+<div class="vehicle-select-container">
     <h1>Select the Type of Vehicle</h1>
     <div class="button-group">
-        <a href="{{ url_for('listing_routes.create_motorcycle') }}">
-            <button>Motorcycle</button>
-        </a>
-        <a href="{{ url_for('listing_routes.create_van') }}">
-            <button>Van</button>
-        </a>
-        <a href="{{ url_for('listing_routes.create_car') }}">
-            <button>Car</button>
-        </a>
+        <a href="{{ url_for('ad_routes.create_motorcycle') }}" class="vehicle-button">Motorcycle</a>
+        <a href="{{ url_for('ad_routes.create_van') }}" class="vehicle-button">Van</a>
+        <a href="{{ url_for('ad_routes.create_car') }}" class="vehicle-button">Car</a>
     </div>
+
     <div class="back-button">
-        <a href="{{ url_for('listing_routes.view_mylistings') }}">
-            <button>Back to My Ads</button>
-        </a>
+        <a href="{{ url_for('auth_routes.dashboard') }}" class="vehicle-button back-button">Back to Dashboard</a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

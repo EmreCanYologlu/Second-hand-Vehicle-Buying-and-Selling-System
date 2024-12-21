@@ -1,0 +1,93 @@
+/* Navbar Styles */
+.navbar {
+    background: linear-gradient(135deg, #1e3c72, #2a5298); /* Cool blue gradient */
+    color: white; /* White text for contrast */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+
+/* Navbar Container */
+.navbar .container {
+    display: flex;
+    justify-content: space-between; /* Spread items horizontally */
+    align-items: center;
+    width: 100%; /* Full width of navbar */
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none; /* Explicitly remove bullet points */
+    display: flex; /* Arrange links in a row */
+    gap: 20px; /* Space between links */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+.nav-links li {
+    list-style: none; /* Remove any list styles */
+    margin: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+}
+
+.nav-links li a {
+    color: #fff;
+    font-size: 1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #FFD700;
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Search Bar */
+.search-bar form {
+    display: flex;
+    gap: 5px;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+    width: 200px;
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    background-color: #FFD700; /* Gold */
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #FFB800;
+}
+
+/* Sign Out Button */
+.auth-button .btn-signout {
+    padding: 8px 15px;
+    background-color: #FF4B2B;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.auth-button .btn-signout:hover {
+    background-color: #E63E22;
+    transform: scale(1.05); /* Slight zoom effect */
+}

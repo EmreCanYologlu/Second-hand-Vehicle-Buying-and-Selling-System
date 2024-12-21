@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Ad Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ ad.title }}</h2>
+    <div class="ad-details">
+        <img src="{{ ad.image or '/static/default_photo.jpg' }}" alt="{{ ad.title }}" style="max-width: 100%; border-radius: 10px;">
+        <p><strong>Description:</strong> {{ ad.description }}</p>
+        <p><strong>Price:</strong> ${{ ad.price }}</p>
+        <p><strong>Vehicle:</strong> {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
+        <p><strong>Seller:</strong> {{ ad.seller }}</p>
+    </div>
+    <a href="{{ url_for('listing_routes.listings') }}" class="btn">Back to Listings</a>
+</div>
+{% endblock %}

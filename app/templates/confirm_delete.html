@@ -1,72 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Confirm Delete</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
+{% extends "base.html" %}
 
-        .container {
-            margin: 100px auto;
-            max-width: 600px;
-            text-align: center;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+{% block title %}Confirm Delete{% endblock %}
 
-        h1 {
-            color: #d9534f;
-        }
+{% block content %}
+<div class="delete-container">
+    <h1>Are you sure?</h1>
+    <p>Do you really want to delete the ad titled "<strong>{{ ad.title }}</strong>"? This action cannot be undone.</p>
 
-        .buttons {
-            margin-top: 20px;
-        }
+    <div class="buttons">
+        <!-- Cancel Button -->
+        <a href="{{ url_for('listing_routes.view_mylistings') }}" class="btn-primary">Cancel</a>
 
-        .buttons a, .buttons form button {
-            text-decoration: none;
-            margin: 0 10px;
-            padding: 10px 20px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .buttons a {
-            background-color: #007BFF;
-        }
-
-        .buttons a:hover {
-            background-color: #0056b3;
-        }
-
-        .buttons form button {
-            background-color: #d9534f;
-        }
-
-        .buttons form button:hover {
-            background-color: #c9302c;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Are you sure?</h1>
-        <p>Do you really want to delete the ad titled "<strong>{{ ad.title }}</strong>"? This action cannot be undone.</p>
-        <div class="buttons">
-            <a href="{{ url_for('listing_routes.view_mylistings') }}">Cancel</a>
-            <form action="{{ url_for('listing_routes.delete_ad', ad_id=ad.ad_id) }}" method="POST" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        </div>
+        <!-- Delete Button -->
+        <form action="{{ url_for('listing_routes.delete_ad', ad_id=ad.ad_id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn-danger">Delete</button>
+        </form>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

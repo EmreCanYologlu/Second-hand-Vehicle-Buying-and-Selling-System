@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Listings App{% endblock %}</title>
+    
+    <!-- Link to the main CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <!-- Logo -->
+                <h1 class="logo">Vehicle Market</h1>
+        
+                <!-- Navigation Links -->
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('listing_routes.listings') }}">View Market</a></li>
+                    <li><a href="{{ url_for('listing_routes.select_vehicle_type') }}">List Vehicle</a></li>
+                    <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('auth_routes.logout') }}">Logout</a></li>
+                </ul>
+        
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <form action="{{ url_for('listing_routes.search') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search ads..." required>
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+        
+                <!-- Sign Out Button -->
+                <div class="auth-button">
+                    <a href="{{ url_for('auth_routes.logout') }}" class="btn-signout">Sign Out</a>
+                </div>
+            </div>
+        </nav>        
+    </header>        
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Vehicle Market. All rights reserved.</p>
+            <ul class="social-links">
+                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

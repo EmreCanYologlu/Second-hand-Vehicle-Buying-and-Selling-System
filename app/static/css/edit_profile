@@ -1,0 +1,105 @@
+/* Edit Profile Container */
+.edit-profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff; /* Cleaner white background */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-family: 'Roboto', sans-serif;
+    text-align: center; /* Center-align text */
+}
+
+/* Header Styling */
+.edit-profile-container h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.edit-profile-container h2 {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.edit-profile-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center-align form fields */
+}
+
+/* Label Styling */
+.edit-profile-container label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    align-self: flex-start; /* Align label with input */
+}
+
+/* Input Styling */
+.edit-profile-container input {
+    width: 100%; /* Ensure inputs span full width of container */
+    max-width: 500px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edit-profile-container input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Submit Button */
+.edit-profile-container button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.edit-profile-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Back to Dashboard Link */
+.edit-profile-container .back-link {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.edit-profile-container .back-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .edit-profile-container {
+        padding: 15px;
+    }
+
+    .edit-profile-container input {
+        max-width: 100%;
+    }
+
+    .edit-profile-container button {
+        width: 100%; /* Full-width button on smaller screens */
+    }
+}

@@ -89,13 +89,13 @@ CREATE TABLE Van (
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
--- Create `Photo` table
 CREATE TABLE Photo (
-    p_id INT AUTO_INCREMENT PRIMARY KEY,
-    height INT,
-    width INT,
-    content VARCHAR(255) NOT NULL,
-    vehicle_id INT NOT NULL,
+    p_id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each photo
+    vehicle_id INT NOT NULL,             -- Foreign key to link the photo to a vehicle
+    content VARCHAR(255) NOT NULL,       -- Path or URL to the photo file
+    height INT DEFAULT NULL,             -- Optional: Height of the image
+    width INT DEFAULT NULL,              -- Optional: Width of the image
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp for when the photo was added
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 

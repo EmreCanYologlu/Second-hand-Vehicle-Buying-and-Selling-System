@@ -1,177 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Create Car Ad</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
+{% extends "base.html" %}
 
-        header {
-            background-color: #333;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
+{% block title %}Create Car Ad{% endblock %}
 
-        header h1 {
-            margin: 0;
-        }
+{% block content %}
+<div class="form-container">
+    <h1>Create Car Ad</h1>
+    <h2>Enter Car and Ad Details</h2>
 
-        .container {
-            margin: 30px auto;
-            max-width: 600px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    <form method="POST" enctype="multipart/form-data">
+        <!-- Ad Details -->
+        <h3>Ad Details</h3>
+        <div class="form-group">
+            <label for="title">Ad Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter ad title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Ad Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Describe the car"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">Price ($)</label>
+            <input type="number" id="price" name="price" placeholder="Enter price" min="1" required>
+        </div>
 
-        .container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input, form select, form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        form textarea {
-            resize: vertical;
-            height: 100px;
-        }
-
-        form button {
-            width: 100%;
-            padding: 15px;
-            font-size: 1em;
-            font-weight: bold;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        form button:hover {
-            background-color: #0056b3;
-        }
-
-        .back-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-button a {
-            color: #007BFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .back-button a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            <ul>
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <header>
-        <h1>Create Car Ad</h1>
-    </header>
-    <div class="container">
-        <h2>Enter Car and Ad Details</h2>
-        <form method="POST" enctype="multipart/form-data">
-            <!-- Ad Details -->
-            <label for="title">Ad Title:</label>
-            <input type="text" id="title" name="title" placeholder="Enter the ad title" required>
-
-            <label for="description">Ad Description:</label>
-            <textarea id="description" name="description" placeholder="Provide details about the car"></textarea>
-
-            <label for="price">Price ($):</label>
-            <input type="number" id="price" name="price" min="1" placeholder="Enter the price" required>
-
-            <!-- Vehicle Details -->
-            <h3>Vehicle Details</h3>
-            <label for="brand">Brand:</label>
-            <input type="text" id="brand" name="brand" placeholder="Enter the car brand" required>
-
-            <label for="series">Series:</label>
-            <input type="text" id="series" name="series" placeholder="Enter the car series (if any)">
-
-            <label for="model">Model:</label>
-            <input type="text" id="model" name="model" placeholder="Enter the car model" required>
-
-            <label for="year">Year:</label>
-            <input type="number" id="year" name="year" min="1900" max="2024" placeholder="Enter the car's manufacturing year" required>
-
-            <label for="fuel_type">Fuel Type:</label>
+        <!-- Vehicle Details -->
+        <h3>Vehicle Details</h3>
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" name="brand" placeholder="Enter car brand" required>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" name="model" placeholder="Enter car model" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" name="year" min="1900" max="2024" placeholder="Enter manufacturing year" required>
+        </div>
+        <div class="form-group">
+            <label for="fuel_type">Fuel Type</label>
             <select id="fuel_type" name="fuel_type" required>
+                <option value="" disabled selected>Select fuel type</option>
                 <option value="Petrol">Petrol</option>
                 <option value="Diesel">Diesel</option>
                 <option value="Electric">Electric</option>
                 <option value="Hybrid">Hybrid</option>
             </select>
-
-            <label for="km">Mileage (km):</label>
-            <input type="number" id="km" name="km" min="0" placeholder="Enter the mileage" required>
-
-            <label for="hp">Horsepower (HP):</label>
-            <input type="number" id="hp" name="hp" min="0" placeholder="Enter the horsepower">
-
-            <label for="cc">Engine Capacity (CC):</label>
-            <input type="number" id="cc" name="cc" min="0" placeholder="Enter the engine capacity">
-
-            <label for="drivetrain">Drivetrain:</label>
-            <select id="drivetrain" name="drivetrain" required>
-                <option value="FWD">Front-Wheel Drive (FWD)</option>
-                <option value="RWD">Rear-Wheel Drive (RWD)</option>
-                <option value="AWD">All-Wheel Drive (AWD)</option>
-            </select>
-
-            <label for="condition">Condition:</label>
-            <select id="condition" name="condition" required>
-                <option value="No Damage">No Damage</option>
-                <option value="Damaged">Damaged</option>
-                <option value="Heaviliy Damaged">Heaviliy Damaged</option>
-            </select>
-
-            <label for="color">Color:</label>
-            <input type="text" id="color" name="color" placeholder="Enter the car color" required>
-
-            <label for="guarantee">Guarantee:</label>
-            <input type="text" id="guarantee" name="guarantee" placeholder="Enter the guarantee details (if any)">
-
-            <label for="plate">License Plate:</label>
-            <input type="text" id="plate" name="plate" placeholder="Enter the license plate">
-
-            <!-- Car-Specific Details -->
-            <h3>Car-Specific Details</h3>
-            <label for="body_style">Body Style:</label>
+        </div>
+        <div class="form-group">
+            <label for="mileage">Mileage (km)</label>
+            <input type="number" id="mileage" name="mileage" min="0" placeholder="Enter mileage" required>
+        </div>
+        <div class="form-group">
+            <label for="body_style">Body Style</label>
             <select id="body_style" name="body_style" required>
                 <option value="Sedan">Sedan</option>
                 <option value="SUV">SUV</option>
@@ -179,35 +60,47 @@
                 <option value="Hatchback">Hatchback</option>
                 <option value="Convertible">Convertible</option>
             </select>
-
-            <label for="door_count">Number of Doors:</label>
-            <input type="number" id="door_count" name="door_count" min="1" placeholder="Enter the number of doors" required>
-
-            <label for="airbags_count">Number of Airbags:</label>
-            <input type="number" id="airbags_count" name="airbags_count" min="0" placeholder="Enter the number of airbags">
-
-            <label for="infotainment_screen">Infotainment Screen:</label>
-            <input type="checkbox" id="infotainment_screen" name="infotainment_screen">
-
-            <label for="ac">Air Conditioning:</label>
-            <input type="checkbox" id="ac" name="ac">
-
-            <label for="lane_assist">Lane Assist:</label>
-            <input type="checkbox" id="lane_assist" name="lane_assist">
-
-            <label for="abs">Anti-Lock Braking System (ABS):</label>
-            <input type="checkbox" id="abs" name="abs">
-
-            <!-- Photo Upload -->
-            <h3>Upload Photo</h3>
-            <label for="photos">Upload Photo (Max size: 5MB):</label>
-            <input type="file" id="photos" name="photos" accept="image/*" required>
-
-            <button type="submit">Create Ad</button>
-        </form>
-        <div class="back-button">
-            <a href="{{ url_for('listing_routes.select_vehicle_type') }}">Back</a>
         </div>
+        <div class="form-group">
+            <label for="door_count">Number of Doors</label>
+            <input type="number" id="door_count" name="door_count" min="1" placeholder="Enter door count" required>
+        </div>
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color" placeholder="Enter car color" required>
+        </div>
+
+        <!-- Features -->
+        <h3>Car Features</h3>
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" name="infotainment_screen"> Infotainment Screen
+            </label>
+            <label>
+                <input type="checkbox" name="ac"> Air Conditioning
+            </label>
+            <label>
+                <input type="checkbox" name="lane_assist"> Lane Assist
+            </label>
+            <label>
+                <input type="checkbox" name="abs"> Anti-Lock Braking System (ABS)
+            </label>
+        </div>
+
+        <!-- Upload Photos -->
+        <h3>Upload Photos</h3>
+        <div class="form-group">
+            <label for="photos">Car Photos (Max size: 5MB each)</label>
+            <input type="file" id="photos" name="photos" accept="image/*" multiple required>
+            <p class="help-text">You can upload multiple photos. Hold down Ctrl (Cmd on Mac) to select multiple files.</p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">Create Ad</button>
+    </form>
+
+    <div class="back-button">
+        <a href="{{ url_for('listing_routes.select_vehicle_type') }}">Back to Selection</a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

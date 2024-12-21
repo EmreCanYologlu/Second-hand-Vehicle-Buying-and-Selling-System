@@ -72,7 +72,7 @@ def login():
                 session['user_id'] = user['user_id']
                 session['username'] = user['username']
                 flash('Login successful!', 'success')
-                return redirect(url_for('listing_routes.view_listings'))
+                return redirect(url_for('listing_routes.listings'))
             else:
                 flash('Invalid email or password!', 'danger')
         except mysql.connector.Error as err:
@@ -121,24 +121,32 @@ def dashboard():
         db = get_db_connection()
         cursor = db.cursor(dictionary=True)
 
-        # Fetch user-specific data
-        query = "SELECT username, email FROM User WHERE user_id = %s"
-        cursor.execute(query, (session['user_id'],))
+        # Fetch user data
+        user_query = "SELECT username, email FROM User WHERE user_id = %s"
+        cursor.execute(user_query, (session['user_id'],))
         user_data = cursor.fetchone()
 
         if not user_data:
             flash('User not found!', 'danger')
             return redirect(url_for('auth_routes.login'))
 
-        # Pass user data to the template
-        return render_template('dashboard.html', user=user_data)
+        # Fetch user's ads
+        ads_query = """
+            SELECT ad_id, title, description, price, status
+            FROM VehicleAd
+            WHERE seller_id = %s
+        """
+        cursor.execute(ads_query, (session['user_id'],))
+        user_ads = cursor.fetchall()
+
+        # Pass user data and ads to the template
+        return render_template('dashboard.html', user=user_data, ads=user_ads)
     except mysql.connector.Error as err:
         flash(f'Error: {err}', 'danger')
         return redirect(url_for('auth_routes.login'))
     finally:
         cursor.close()
         db.close()
-
 
 
 @auth_routes.route('/logout')
