@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ad Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            margin: 30px auto;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .ad-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ad-photo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ad-photo img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .details-section {
+            margin-bottom: 20px;
+        }
+
+        .details-section h3 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .details-section p {
+            margin: 5px 0;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+
+        .send-message button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        .send-message button:hover {
+            background-color: #0056b3;
+        }
+    
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    
+        .popup-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 300px;
+            position: relative;
+        }
+    
+        .popup-content h3 {
+            margin: 0 0 10px;
+        }
+    
+        .popup-content textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+    
+        .popup-content button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        .popup-content button:hover {
+            background-color: #218838;
+        }
+    
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function openMessagePopup() {
+            document.getElementById('message-popup').style.display = 'block';
+        }
+    
+        function closeMessagePopup() {
+            document.getElementById('message-popup').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
+            <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+        </ul>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories = True)%}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <header>
+        <h1>Ad Details</h1>
+    </header>
+    
+    <div class="container">
+        <div class="ad-header">
+            <h2>{{ ad.title }}</h2>
+            <p class="price">Price: ${{ ad.price }}</p>
+        </div>
+
+        <div class="ad-photo">
+            {% for photo in photos %}
+                <img src="{{ photo.content }}" alt="Ad Photo">
+                {% if photo.is_primary %}
+                    <p><strong>Primary Photo</strong></p>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="details-section">
+            <h3>General Details</h3>
+            <p><strong>Description:</strong> {{ ad.description }}</p>
+            <p><strong>Brand:</strong> {{ ad.brand }}</p>
+            <p><strong>Model:</strong> {{ ad.model }}</p>
+            <p><strong>Year:</strong> {{ ad.year }}</p>
+            <p><strong>Fuel Type:</strong> {{ ad.fuel_type }}</p>
+            <p><strong>Mileage (km):</strong> {{ ad.km }}</p>
+            <p><strong>Horsepower (HP):</strong> {{ ad.hp }}</p>
+            <p><strong>Engine Capacity (CC):</strong> {{ ad.cc }}</p>
+            <p><strong>Drivetrain:</strong> {{ ad.drivetrain }}</p>
+            <p><strong>Color:</strong> {{ ad.color }}</p>
+            <p><strong>Guarantee:</strong> {{ 'Yes' if ad.guarantee else 'No' }}</p>
+            <p><strong>Condition:</strong> {{ ad.car_condition }}</p>
+            <p><strong>License Plate:</strong> {{ ad.plate }}</p>
+        </div>
+
+        {% if subclass == 'Car' %}
+        <div class="details-section">
+            <h3>Car Details</h3>
+            <p><strong>Body Style:</strong> {{ subclass_attributes.body_style }}</p>
+            <p><strong>Number of Doors:</strong> {{ subclass_attributes.door_count }}</p>
+            <p><strong>Infotainment Screen:</strong> {{ 'Yes' if subclass_attributes.infotainment_screen else 'No' }}</p>
+            <p><strong>Air Conditioning:</strong> {{ 'Yes' if subclass_attributes.ac else 'No' }}</p>
+            <p><strong>Emission Standard:</strong> {{ subclass_attributes.emission_standard }}</p>
+            <p><strong>Number of Airbags:</strong> {{ subclass_attributes.airbags_count }}</p>
+            <p><strong>Lane Assist:</strong> {{ 'Yes' if subclass_attributes.lane_assist else 'No' }}</p>
+            <p><strong>ABS:</strong> {{ 'Yes' if subclass_attributes.abs else 'No' }}</p>
+        </div>
+        {% elif subclass == 'Van' %}
+        <div class="details-section">
+            <h3>Van Details</h3>
+            <p><strong>Seating Configuration:</strong> {{ subclass_attributes.seating_config }}</p>
+            <p><strong>Sliding Doors:</strong> {{ 'Yes' if subclass_attributes.sliding_doors else 'No' }}</p>
+            <p><strong>Cargo Volume:</strong> {{ subclass_attributes.cargo_volume }} m³</p>
+            <p><strong>Removable Seats:</strong> {{ 'Yes' if subclass_attributes.removable_seats else 'No' }}</p>
+            <p><strong>Roof Height:</strong> {{ subclass_attributes.roof_height }} m</p>
+            <p><strong>Van Type:</strong> {{ subclass_attributes.van_type }}</p>
+        </div>
+        {% elif subclass == 'Bike' %}
+        <div class="details-section">
+            <h3>Bike Details</h3>
+            <p><strong>Bike Type:</strong> {{ subclass_attributes.bike_type }}</p>
+            <p><strong>Frame Material:</strong> {{ subclass_attributes.frame_material }}</p>
+            <p><strong>Saddle Height:</strong> {{ subclass_attributes.saddle_height }} cm</p>
+            <p><strong>Handlebar Type:</strong> {{ subclass_attributes.handlebar_type }}</p>
+        </div>
+        {% endif %}
+        <div class="send-message">
+            {% if session['user_id'] != ad.seller_id %}
+                <button onclick="openMessagePopup()">Send Message</button>
+            {% else %}
+                <p>You cannot send a message to yourself.</p>
+            {% endif %}
+        </div>
+
+        <!-- Message Popup -->
+        <div id="message-popup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="closeMessagePopup()">&times;</span>
+                <h3>Send a Message</h3>
+                <form method="POST" action="{{ url_for('messaging_routes.send_message') }}">
+                    <textarea name="message_content" placeholder="Write your message here..." required></textarea>
+                    <input type="hidden" name="receiver_id" value="{{ ad.seller_id }}">
+                    <input type="hidden" name="ad_id" value="{{ ad.ad_id }}">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+        <div class="back-button">
+            <a href="{{ url_for('listing_routes.view_listings') }}">Back to Listings</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
--- Create `User` table
+-- Update `User` table
 CREATE TABLE User (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -8,14 +8,14 @@ CREATE TABLE User (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create `Admin` table
+-- Update `Admin` table
 CREATE TABLE Admin (
     permission_level INT NOT NULL CHECK(permission_level BETWEEN 1 AND 5),
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `Vehicle` table
+-- Update `Vehicle` table
 CREATE TABLE Vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
     brand VARCHAR(50),
@@ -33,7 +33,7 @@ CREATE TABLE Vehicle (
     plate VARCHAR(20)
 );
 
--- Create `VehicleAd` table
+-- Update `VehicleAd` table
 CREATE TABLE VehicleAd (
     ad_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
@@ -47,7 +47,7 @@ CREATE TABLE VehicleAd (
     FOREIGN KEY (seller_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `AdminAction` table
+-- Update `AdminAction` table
 CREATE TABLE AdminAction (
     action_id INT AUTO_INCREMENT PRIMARY KEY,
     action_type VARCHAR(100),
@@ -61,7 +61,7 @@ CREATE TABLE AdminAction (
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `Rating` table
+-- Update `Rating` table
 CREATE TABLE Rating (
     rating_id INT AUTO_INCREMENT PRIMARY KEY,
     score INT NOT NULL CHECK(score BETWEEN 1 AND 5),
@@ -75,7 +75,7 @@ CREATE TABLE Rating (
     FOREIGN KEY (ad_id) REFERENCES VehicleAd(ad_id) ON DELETE CASCADE
 );
 
--- Create `SearchPreference` table
+-- Update `SearchPreference` table
 CREATE TABLE SearchPreference (
     sp_id INT AUTO_INCREMENT PRIMARY KEY,
     brand VARCHAR(50) NOT NULL,
@@ -95,25 +95,26 @@ CREATE TABLE SearchPreference (
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `ExpertReport` table
+-- Update `ExpertReport` table
 CREATE TABLE ExpertReport (
     w_id INT AUTO_INCREMENT PRIMARY KEY,
-    content LONGBLOB NOT NULL,
-    vehicle_id INT NOT NULL,
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
-);
-
--- Create `Photo` table
-CREATE TABLE Photo (
-    p_id INT AUTO_INCREMENT PRIMARY KEY,
-    height INT,
-    width INT,
     content VARCHAR(255) NOT NULL,
     vehicle_id INT NOT NULL,
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
--- Create `Car` table
+-- Update `Photo` table
+CREATE TABLE Photo (
+    p_id INT AUTO_INCREMENT PRIMARY KEY,
+    height INT,
+    width INT,
+    content VARCHAR(255) NOT NULL,
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+    vehicle_id INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
+);
+
+-- Update `Car` table
 CREATE TABLE Car (
     body_style VARCHAR(50),
     door_count INT CHECK(door_count > 0),
@@ -127,7 +128,7 @@ CREATE TABLE Car (
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
--- Create `Bike` table
+-- Update `Bike` table
 CREATE TABLE Bike (
     bike_type VARCHAR(50),
     frame_material VARCHAR(50),
@@ -137,7 +138,7 @@ CREATE TABLE Bike (
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
--- Create `Van` table
+-- Update `Van` table
 CREATE TABLE Van (
     seating_config VARCHAR(50),
     sliding_doors BOOLEAN,
@@ -149,7 +150,7 @@ CREATE TABLE Van (
     FOREIGN KEY (vehicle_id) REFERENCES Vehicle(vehicle_id) ON DELETE CASCADE
 );
 
--- Create `InterestedIn` table
+-- Update `InterestedIn` table
 CREATE TABLE InterestedIn (
     user_id INT NOT NULL,
     ad_id INT NOT NULL,
@@ -158,7 +159,7 @@ CREATE TABLE InterestedIn (
     FOREIGN KEY (ad_id) REFERENCES VehicleAd(ad_id) ON DELETE CASCADE
 );
 
--- Create `Bid` table
+-- Update `Bid` table
 CREATE TABLE Bid (
     bid_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL CHECK(amount > 0),
@@ -171,18 +172,19 @@ CREATE TABLE Bid (
     FOREIGN KEY (ad_id) REFERENCES VehicleAd(ad_id) ON DELETE CASCADE
 );
 
--- Create `Message` table
+-- Update `Message` table
 CREATE TABLE Message (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
     content TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
+    status ENUM('sent', 'delivered', 'read') NOT NULL DEFAULT 'sent',
     FOREIGN KEY (sender_id) REFERENCES User(user_id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `Notification` table
+-- Update `Notification` table
 CREATE TABLE Notification (
     notification_id INT AUTO_INCREMENT PRIMARY KEY,
     message TEXT NOT NULL,
@@ -191,7 +193,7 @@ CREATE TABLE Notification (
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
--- Create `ActionNotif` table
+-- Update `ActionNotif` table
 CREATE TABLE ActionNotif (
     notification_id INT NOT NULL,
     action_id INT NOT NULL,
@@ -200,7 +202,7 @@ CREATE TABLE ActionNotif (
     FOREIGN KEY (action_id) REFERENCES AdminAction(action_id) ON DELETE CASCADE
 );
 
--- Create `BidNotif` table
+-- Update `BidNotif` table
 CREATE TABLE BidNotif (
     notification_id INT NOT NULL,
     bid_id INT NOT NULL,
@@ -209,7 +211,7 @@ CREATE TABLE BidNotif (
     FOREIGN KEY (bid_id) REFERENCES Bid(bid_id) ON DELETE CASCADE
 );
 
--- Create `MessageNotif` table
+-- Update `MessageNotif` table
 CREATE TABLE MessageNotif (
     notification_id INT NOT NULL,
     message_id INT NOT NULL,
@@ -218,7 +220,7 @@ CREATE TABLE MessageNotif (
     FOREIGN KEY (message_id) REFERENCES Message(message_id) ON DELETE CASCADE
 );
 
--- Create `Transaction` table
+-- Update `Transaction` table
 CREATE TABLE Transaction (
     t_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL CHECK(amount > 0),
@@ -231,10 +233,21 @@ CREATE TABLE Transaction (
     FOREIGN KEY (ad_id) REFERENCES VehicleAd(ad_id) ON DELETE CASCADE
 );
 
--- Create `Wallet` table
+-- Update `Wallet` table
 CREATE TABLE Wallet (
     w_id INT AUTO_INCREMENT PRIMARY KEY,
     funds DECIMAL(10, 2) NOT NULL CHECK(funds >= 0),
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+-- Add trigger for cascading deletes on `VehicleAd`
+DELIMITER //
+CREATE TRIGGER delete_related_records_after_vehiclead_delete
+AFTER DELETE ON VehicleAd
+FOR EACH ROW
+BEGIN
+    DELETE FROM Photo WHERE vehicle_id = OLD.vehicle_id;
+    DELETE FROM Vehicle WHERE vehicle_id = OLD.vehicle_id;
+END;//
+DELIMITER ;

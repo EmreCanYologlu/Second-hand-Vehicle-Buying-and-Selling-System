@@ -102,6 +102,21 @@
             color: #007BFF;
         }
 
+        .view-details {
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details:hover {
+            background-color: #0056b3;
+        }
+
         .add-ad {
             display: block;
             margin: 20px auto;
@@ -129,7 +144,9 @@
         <ul>
             <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
             <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('messaging_routes.view_conversations') }}">Messages</a></li>
             <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+
         </ul>
     </nav>
     <header>
@@ -148,6 +165,7 @@
                     <p class="price">Price: ${{ ad.price }}</p>
                     <p>Vehicle: {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
                 </div>
+                <a class="view-details" href="{{ url_for('listing_routes.view_ad_details', ad_id=ad.ad_id) }}">View Details</a>
             </div>
             {% endfor %}
         {% else %}

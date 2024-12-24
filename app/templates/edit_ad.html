@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Vehicle Ad</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            margin: 30px auto;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+
+        form input:focus, form select:focus, form textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        form textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .photo-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .photo-preview div {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-preview img {
+            width: 180px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .photo-preview label {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .photo-preview input[type="checkbox"], .photo-preview input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .photo-preview button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .photo-preview button:hover {
+            background-color: darkred;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .actions button {
+            width: 48%;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .flash-messages.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .flash-messages.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            margin-bottom: 10px;
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Vehicle Ad</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="vehicle_id" value="{{ ad.vehicle_id }}">
+            <input type="hidden" name="subclass" value="{{ subclass }}">
+
+            <div class="form-section">
+                <h3>Ad Details</h3>
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" value="{{ ad.title }}" required>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description">{{ ad.description }}</textarea>
+
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" value="{{ ad.price }}" required>
+            </div>
+
+            <div class="form-section">
+                <h3>Vehicle Details</h3>
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" value="{{ ad.brand }}" required>
+
+                <label for="series">Series</label>
+                <input type="text" id="series" name="series" value="{{ ad.series }}">
+
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" value="{{ ad.model }}" required>
+
+                <label for="year">Year</label>
+                <input type="number" id="year" name="year" value="{{ ad.year }}" required>
+
+                <label for="fuel_type">Fuel Type</label>
+                <select id="fuel_type" name="fuel_type" required>
+                    <option value="Petrol" {{ 'selected' if ad.fuel_type == 'Petrol' else '' }}>Petrol</option>
+                    <option value="Diesel" {{ 'selected' if ad.fuel_type == 'Diesel' else '' }}>Diesel</option>
+                    <option value="Electric" {{ 'selected' if ad.fuel_type == 'Electric' else '' }}>Electric</option>
+                    <option value="Hybrid" {{ 'selected' if ad.fuel_type == 'Hybrid' else '' }}>Hybrid</option>
+                </select>
+
+                <label for="km">Mileage (km)</label>
+                <input type="number" id="km" name="km" value="{{ ad.km }}" required>
+
+                <label for="hp">Horsepower (HP)</label>
+                <input type="number" id="hp" name="hp" value="{{ ad.HP }}">
+
+                <label for="cc">Engine Capacity (CC)</label>
+                <input type="number" id="cc" name="cc" value="{{ ad.cc }}">
+
+                <label for="drivetrain">Drivetrain</label>
+                <select id="drivetrain" name="drivetrain" required>
+                    <option value="FWD" {{ 'selected' if ad.drivetrain == 'FWD' else '' }}>FWD</option>
+                    <option value="RWD" {{ 'selected' if ad.drivetrain == 'RWD' else '' }}>RWD</option>
+                    <option value="AWD" {{ 'selected' if ad.drivetrain == 'AWD' else '' }}>AWD</option>
+                </select>
+
+                <label for="color">Color</label>
+                <input type="text" id="color" name="color" value="{{ ad.color }}" required>
+
+                <label for="guarantee">Guarantee</label>
+                <input type="checkbox" id="guarantee" name="guarantee" {{ 'checked' if ad.guarantee else '' }}>
+
+                <label for="condition">Condition</label>
+                <select id="condition" name="condition" required>
+                    <option value="heavily damaged" {{ 'selected' if ad.car_condition == 'heavily damaged' else '' }}>Heavily Damaged</option>
+                    <option value="damaged" {{ 'selected' if ad.car_condition == 'damaged' else '' }}>Damaged</option>
+                    <option value="no damage" {{ 'selected' if ad.car_condition == 'no damage' else '' }}>No Damage</option>
+                </select>
+
+                <label for="plate">License Plate</label>
+                <input type="text" id="plate" name="plate" value="{{ ad.plate }}">
+            </div>
+
+            {% if subclass == 'Car' %}
+            <div class="form-section">
+                <h3>Car Details</h3>
+                <label for="body_style">Body Style</label>
+                <input type="text" id="body_style" name="body_style" value="{{ subclass_attributes.body_style }}">
+
+                <label for="door_count">Number of Doors</label>
+                <input type="number" id="door_count" name="door_count" value="{{ subclass_attributes.door_count }}">
+
+                <label for="infotainment_screen">Infotainment Screen</label>
+                <input type="checkbox" id="infotainment_screen" name="infotainment_screen" {{ 'checked' if subclass_attributes.infotainment_screen else '' }}>
+
+                <label for="ac">Air Conditioning</label>
+                <input type="checkbox" id="ac" name="ac" {{ 'checked' if subclass_attributes.ac else '' }}>
+
+                <label for="emission_standard">Emission Standard</label>
+                <input type="text" id="emission_standard" name="emission_standard" value="{{ subclass_attributes.emission_standard }}">
+
+                <label for="airbags_count">Number of Airbags</label>
+                <input type="number" id="airbags_count" name="airbags_count" value="{{ subclass_attributes.airbags_count }}">
+
+                <label for="lane_assist">Lane Assist</label>
+                <input type="checkbox" id="lane_assist" name="lane_assist" {{ 'checked' if subclass_attributes.lane_assist else '' }}>
+
+                <label for="abs">Anti-Lock Braking System (ABS)</label>
+                <input type="checkbox" id="abs" name="abs" {{ 'checked' if subclass_attributes.abs else '' }}>
+            </div>
+            {% endif %}
+            {% if subclass == 'Van' %}
+            <div class="form-section">
+                <h3>Van Details</h3>
+                <label for="seating_config">Seating Configuration</label>
+                <input type="text" id="seating_config" name="seating_config" value="{{ subclass_attributes.seating_config }}">
+
+                <label for="sliding_doors">Sliding Doors</label>
+                <input type="checkbox" id="sliding_doors" name="sliding_doors" {{ 'checked' if subclass_attributes.sliding_doors else '' }}>
+
+                <label for="cargo_volume">Cargo Volume (m³)</label>
+                <input type="number" id="cargo_volume" name="cargo_volume" step="0.01" value="{{ subclass_attributes.cargo_volume }}">
+
+                <label for="removable_seats">Removable Seats</label>
+                <input type="checkbox" id="removable_seats" name="removable_seats" {{ 'checked' if subclass_attributes.removable_seats else '' }}>
+
+                <label for="roof_height">Roof Height (m)</label>
+                <input type="number" id="roof_height" name="roof_height" step="0.01" value="{{ subclass_attributes.roof_height }}">
+
+                <label for="van_type">Van Type</label>
+                <input type="text" id="van_type" name="van_type" value="{{ subclass_attributes.van_type }}">
+            </div>
+            {% endif %}
+            {% if subclass == 'Bike' %}
+            <div class="form-section">
+                <h3>Bike Details</h3>
+                <label for="bike_type">Bike Type</label>
+                <input type="text" id="bike_type" name="bike_type" value="{{ subclass_attributes.bike_type }}">
+
+                <label for="frame_material">Frame Material</label>
+                <input type="text" id="frame_material" name="frame_material" value="{{ subclass_attributes.frame_material }}">
+
+                <label for="saddle_height">Saddle Height (cm)</label>
+                <input type="number" id="saddle_height" name="saddle_height" step="0.01" value="{{ subclass_attributes.saddle_height }}">
+
+                <label for="handlebar_type">Handlebar Type</label>
+                <input type="text" id="handlebar_type" name="handlebar_type" value="{{ subclass_attributes.handlebar_type }}">
+            </div>
+            {% endif %}
+            <div class="form-section">
+                <h3>Photos</h3>
+                <div class="photo-preview">
+                    {% for photo in photos %}
+                    <div>
+                        <img src="{{ photo.content }}" alt="Photo">
+                        <label>
+                            <input type="checkbox" name="remove_photos" value="{{ photo.p_id }}">
+                            Remove
+                        </label>
+                        <label>
+                            <input type="radio" name="primary_photo" value="{{ photo.p_id }}" {% if photo.is_primary %}checked{% endif %}>
+                            Set as Primary
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <label for="photos">Upload New Photos</label>
+                <input type="file" id="photos" name="photos" multiple>
+            </div>
+
+            <div class="form-section">
+                <h3>Expert Report</h3>
+                {% if report %}
+                <p>Current Report: <a href="{{ report.content }}" target="_blank">Download</a></p>
+                <label>
+                    <input type="checkbox" name="remove_report" value="{{ report.w_id }}">
+                    Remove
+                </label>
+                {% endif %}
+                <label for="expert_report">Upload New Report</label>
+                <input type="file" id="expert_report" name="expert_report">
+            </div>
+
+            <div class="actions">
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="window.location='{{ url_for('listing_routes.view_mylistings') }}'">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

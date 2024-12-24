@@ -142,6 +142,7 @@
         <ul>
             <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
             <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('messaging_routes.view_conversations') }}">Messages</a></li>
             <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
         </ul>
     </nav>
@@ -161,7 +162,9 @@
                     <p>Vehicle: {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
                 </div>
                 <div class="actions">
-                    <a href="#">Edit</a>
+                    <a href="{{ url_for('listing_routes.edit_ad', ad_id=ad.ad_id) }}" style="background-color: #007BFF; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px;">
+                        Edit
+                    </a>
                     <a href="{{ url_for('listing_routes.confirm_delete', ad_id=ad.ad_id) }}" style="background-color: red; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px;">
                         Delete
                     </a>

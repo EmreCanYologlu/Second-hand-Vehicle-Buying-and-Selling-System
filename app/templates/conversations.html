@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Conversations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .conversation {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .conversation:last-child {
+            border-bottom: none;
+        }
+
+        .conversation:hover {
+            background-color: #f9f9f9;
+        }
+
+        .participant {
+            font-weight: bold;
+        }
+
+        .last-message {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #999;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
+            <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('messaging_routes.view_conversations') }}">Messages</a></li>
+            <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Conversations</h1>
+        
+        {% if conversations %}
+            {% for convo in conversations %}
+                <div class="conversation">
+                    <div>
+                        <p class="participant">{{ convo.participant_name }}</p>
+                        <p class="last-message">{{ convo.last_message_content }}</p>
+                    </div>
+                    <a href="{{ url_for('messaging_routes.view_conversation', participant_id=convo.participant_id) }}">View</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No conversations found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

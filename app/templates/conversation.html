@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Conversation</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .messages {
+            margin-bottom: 20px;
+        }
+    
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    
+        .message.sent {
+            align-self: flex-end;
+            background-color: #d4edda;
+            text-align: right;
+            color: #155724;
+        }
+    
+        .message.received {
+            align-self: flex-start;
+            background-color: #d1ecf1;
+            text-align: left;
+            color: #0c5460;
+        }
+    
+        .message-content {
+            word-wrap: break-word;
+        }
+    
+        .message-timestamp {
+            font-size: 0.8em;
+            margin-top: 5px;
+            color: #666;
+        }
+    
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+    
+        form button {
+            align-self: flex-end;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        form button:hover {
+            background-color: #0056b3;
+        }
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories = True)%}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
+            <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('messaging_routes.view_conversations') }}">Messages</a></li>
+            <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Conversation with {{ participant.username }}</h1>
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {% if message.sender_id == session['user_id'] %}sent{% else %}received{% endif %}">
+                    <div class="message-content">
+                        {{ message.content }}
+                    </div>
+                    <div class="message-timestamp">
+                        {{ message.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <form method="POST" action="{{ url_for('messaging_routes.view_conversation', participant_id=participant_id) }}">
+            <textarea name="message_content" placeholder="Type your message..." required></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Create Car Ad</title>
+    <title>Create Bike Ad</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -100,17 +100,17 @@
         {% endif %}
     {% endwith %}
     <header>
-        <h1>Create Car Ad</h1>
+        <h1>Create Bike Ad</h1>
     </header>
     <div class="container">
-        <h2>Enter Car and Ad Details</h2>
+        <h2>Enter Bike and Ad Details</h2>
         <form method="POST" enctype="multipart/form-data">
             <!-- Ad Details -->
             <label for="title">Ad Title:</label>
             <input type="text" id="title" name="title" placeholder="Enter the ad title" required>
 
             <label for="description">Ad Description:</label>
-            <textarea id="description" name="description" placeholder="Provide details about the car"></textarea>
+            <textarea id="description" name="description" placeholder="Provide details about the bike"></textarea>
 
             <label for="price">Price ($):</label>
             <input type="number" id="price" name="price" min="1" placeholder="Enter the price" required>
@@ -118,16 +118,16 @@
             <!-- Vehicle Details -->
             <h3>Vehicle Details</h3>
             <label for="brand">Brand:</label>
-            <input type="text" id="brand" name="brand" placeholder="Enter the car brand" required>
+            <input type="text" id="brand" name="brand" placeholder="Enter the bike brand" required>
 
             <label for="series">Series:</label>
-            <input type="text" id="series" name="series" placeholder="Enter the car series (if any)">
+            <input type="text" id="series" name="series" placeholder="Enter the bike series (if any)">
 
             <label for="model">Model:</label>
-            <input type="text" id="model" name="model" placeholder="Enter the car model" required>
+            <input type="text" id="model" name="model" placeholder="Enter the bike model" required>
 
             <label for="year">Year:</label>
-            <input type="number" id="year" name="year" min="1900" max="2024" placeholder="Enter the car's manufacturing year" required>
+            <input type="number" id="year" name="year" min="1900" max="2024" placeholder="Enter the bike's manufacturing year" required>
 
             <label for="fuel_type">Fuel Type:</label>
             <select id="fuel_type" name="fuel_type" required>
@@ -161,7 +161,7 @@
             </select>
 
             <label for="color">Color:</label>
-            <input type="text" id="color" name="color" placeholder="Enter the car color" required>
+            <input type="text" id="color" name="color" placeholder="Enter the bike color" required>
 
             <label for="guarantee">Guarantee:</label>
             <input type="text" id="guarantee" name="guarantee" placeholder="Enter the guarantee details (if any)">
@@ -169,38 +169,23 @@
             <label for="plate">License Plate:</label>
             <input type="text" id="plate" name="plate" placeholder="Enter the license plate">
 
-            <!-- Car-Specific Details -->
-            <h3>Car-Specific Details</h3>
-            <label for="body_style">Body Style:</label>
-            <select id="body_style" name="body_style" required>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Coupe">Coupe</option>
-                <option value="Hatchback">Hatchback</option>
-                <option value="Convertible">Convertible</option>
-            </select>
+            <!-- Bike-Specific Details -->
+            <h3>Bike-Specific Details</h3>
+            <label for="bike_type">Bike Type:</label>
+            <input type="text" id="bike_type" name="bike_type" placeholder="Enter the bike type" required>
 
-            <label for="door_count">Number of Doors:</label>
-            <input type="number" id="door_count" name="door_count" min="1" placeholder="Enter the number of doors" required>
+            <label for="frame_material">Frame Material:</label>
+            <input type="text" id="frame_material" name="frame_material" placeholder="Enter the frame material" required>
 
-            <label for="airbags_count">Number of Airbags:</label>
-            <input type="number" id="airbags_count" name="airbags_count" min="0" placeholder="Enter the number of airbags">
+            <label for="saddle_height">Saddle Height (cm):</label>
+            <input type="number" id="saddle_height" name="saddle_height" step="0.01" placeholder="Enter the saddle height" required>
 
-            <label for="infotainment_screen">Infotainment Screen:</label>
-            <input type="checkbox" id="infotainment_screen" name="infotainment_screen">
-
-            <label for="ac">Air Conditioning:</label>
-            <input type="checkbox" id="ac" name="ac">
-
-            <label for="lane_assist">Lane Assist:</label>
-            <input type="checkbox" id="lane_assist" name="lane_assist">
-
-            <label for="abs">Anti-Lock Braking System (ABS):</label>
-            <input type="checkbox" id="abs" name="abs">
+            <label for="handlebar_type">Handlebar Type:</label>
+            <input type="text" id="handlebar_type" name="handlebar_type" placeholder="Enter the handlebar type" required>
 
             <!-- Photo Upload -->
-            <h3>Upload Photo</h3>
-            <label for="photos">Upload Photo (Max size: 5MB):</label>
+            <h3>Upload Photos</h3>
+            <label for="photos">Upload Photos (Max size: 5MB):</label>
             <input type="file" id="photos" name="photos" accept="image/*" multiple required>
 
             <button type="submit">Create Ad</button>
