@@ -29,6 +29,7 @@ CREATE TABLE Vehicle (
     drivetrain VARCHAR(50),
     color VARCHAR(50),
     guarantee BOOLEAN,
+    vehicle_type ENUM('car', 'motorcycle', 'van') NOT NULL,
     car_condition ENUM('heavily damaged', 'damaged', 'no damage'),
     plate VARCHAR(20)
 );
