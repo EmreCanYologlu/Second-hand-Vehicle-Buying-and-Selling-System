@@ -163,7 +163,7 @@ CREATE TABLE InterestedIn (
 CREATE TABLE Bid (
     bid_id INT AUTO_INCREMENT PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL CHECK(amount > 0),
-    status VARCHAR(50),
+    status ENUM('waiting', 'rejected', 'approved') NOT NULL DEFAULT 'waiting', -- Updated to ENUM
     counter_bid DECIMAL(10, 2) CHECK(counter_bid > 0),
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     buyer_id INT NOT NULL,
@@ -171,6 +171,7 @@ CREATE TABLE Bid (
     FOREIGN KEY (buyer_id) REFERENCES User(user_id) ON DELETE CASCADE,
     FOREIGN KEY (ad_id) REFERENCES VehicleAd(ad_id) ON DELETE CASCADE
 );
+
 
 -- Update `Message` table
 CREATE TABLE Message (

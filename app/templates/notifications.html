@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Listings</title>
+    <title>Notifications</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
         nav {
             background-color: #333;
             color: white;
-            padding: 10px 0;
+            padding: 10px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -63,7 +63,7 @@
             padding: 20px;
         }
 
-        .ad-card {
+        .notification-card {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -74,70 +74,43 @@
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
-        .ad-card img {
-            width: 120px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: 20px;
+        .notification-card.read {
+            background-color: #f0f0f0;
         }
 
-        .ad-details {
+        .notification-details {
             flex-grow: 1;
         }
 
-        .ad-details h3 {
+        .notification-details h3 {
             margin: 0 0 10px;
-            font-size: 1.5em;
-        }
-
-        .ad-details p {
-            margin: 5px 0;
-        }
-
-        .ad-details .price {
-            font-weight: bold;
+            font-size: 1.2em;
             color: #007BFF;
         }
 
-        .view-details {
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            transition: background-color 0.3s ease;
+        .notification-details p {
+            margin: 5px 0;
         }
 
-        .view-details:hover {
-            background-color: #0056b3;
+        .timestamp {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
         }
 
-        .add-ad {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            text-align: center;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            width: fit-content;
-        }
-
-        .add-ad:hover {
-            background-color: #218838;
-        }
-
-        .no-results {
+        .no-notifications {
             text-align: center;
             color: #666;
         }
     </style>
+    <script>
+        function markAsRead(notificationCard) {
+            notificationCard.classList.add('read');
+        }
+    </script>
 </head>
 <body>
     <nav>
@@ -153,26 +126,20 @@
         </ul>
     </nav>
     <header>
-        <h1>Listings</h1>
+        <h1>Notifications</h1>
     </header>
     <div class="container">
-        <h2>Explore Ads</h2>
-        <a class="add-ad" href="{{ url_for('listing_routes.select_vehicle_type') }}">Create New Ad</a>
-        {% if results %}
-            {% for ad in results %}
-            <div class="ad-card">
-                <img src="{{ ad.photo_url if ad.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
-                <div class="ad-details">
-                    <h3>{{ ad.title }}</h3>
-                    <p>{{ ad.description }}</p>
-                    <p class="price">Price: ${{ ad.price }}</p>
-                    <p>Vehicle: {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
+        {% if notifications %}
+            {% for notif in notifications %}
+            <div class="notification-card" onclick="markAsRead(this)">
+                <div class="notification-details">
+                    <h3>{{ notif.message }}</h3>
+                    <p class="timestamp">{{ notif.created_at }}</p>
                 </div>
-                <a class="view-details" href="{{ url_for('listing_routes.view_ad_details', ad_id=ad.ad_id) }}">View Details</a>
             </div>
             {% endfor %}
         {% else %}
-        <p class="no-results">No ads found. Create your first ad!</p>
+        <p class="no-notifications">You have no notifications at the moment.</p>
         {% endif %}
     </div>
 </body>

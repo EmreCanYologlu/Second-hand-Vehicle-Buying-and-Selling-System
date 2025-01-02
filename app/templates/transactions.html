@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Listings</title>
+    <title>Transactions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
         nav {
             background-color: #333;
             color: white;
-            padding: 10px 0;
+            padding: 10px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -63,7 +63,17 @@
             padding: 20px;
         }
 
-        .ad-card {
+        .transactions-section {
+            margin-bottom: 40px;
+        }
+
+        .transactions-section h2 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        .transaction-card {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -76,7 +86,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .ad-card img {
+        .transaction-card img {
             width: 120px;
             height: 90px;
             object-fit: cover;
@@ -84,58 +94,17 @@
             margin-right: 20px;
         }
 
-        .ad-details {
+        .transaction-details {
             flex-grow: 1;
         }
 
-        .ad-details h3 {
+        .transaction-details h3 {
             margin: 0 0 10px;
-            font-size: 1.5em;
+            font-size: 1.2em;
         }
 
-        .ad-details p {
+        .transaction-details p {
             margin: 5px 0;
-        }
-
-        .ad-details .price {
-            font-weight: bold;
-            color: #007BFF;
-        }
-
-        .view-details {
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .view-details:hover {
-            background-color: #0056b3;
-        }
-
-        .add-ad {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            text-align: center;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            width: fit-content;
-        }
-
-        .add-ad:hover {
-            background-color: #218838;
-        }
-
-        .no-results {
-            text-align: center;
-            color: #666;
         }
     </style>
 </head>
@@ -153,27 +122,44 @@
         </ul>
     </nav>
     <header>
-        <h1>Listings</h1>
+        <h1>Transactions</h1>
     </header>
     <div class="container">
-        <h2>Explore Ads</h2>
-        <a class="add-ad" href="{{ url_for('listing_routes.select_vehicle_type') }}">Create New Ad</a>
-        {% if results %}
-            {% for ad in results %}
-            <div class="ad-card">
-                <img src="{{ ad.photo_url if ad.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
-                <div class="ad-details">
-                    <h3>{{ ad.title }}</h3>
-                    <p>{{ ad.description }}</p>
-                    <p class="price">Price: ${{ ad.price }}</p>
-                    <p>Vehicle: {{ ad.brand }} {{ ad.model }} ({{ ad.year }})</p>
+        <div class="transactions-section">
+            <h2>Bought</h2>
+            {% if bought %}
+                {% for transaction in bought %}
+                <div class="transaction-card">
+                    <img src="{{ transaction.photo_url if transaction.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
+                    <div class="transaction-details">
+                        <h3>{{ transaction.title }}</h3>
+                        <p>Price: ${{ transaction.amount }}</p>
+                        <p>Date: {{ transaction.created_at }}</p>
+                    </div>
                 </div>
-                <a class="view-details" href="{{ url_for('listing_routes.view_ad_details', ad_id=ad.ad_id) }}">View Details</a>
-            </div>
-            {% endfor %}
-        {% else %}
-        <p class="no-results">No ads found. Create your first ad!</p>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No transactions found in this section.</p>
+            {% endif %}
+        </div>
+
+        <div class="transactions-section">
+            <h2>Sold</h2>
+            {% if sold %}
+                {% for transaction in sold %}
+                <div class="transaction-card">
+                    <img src="{{ transaction.photo_url if transaction.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
+                    <div class="transaction-details">
+                        <h3>{{ transaction.title }}</h3>
+                        <p>Price: ${{ transaction.amount }}</p>
+                        <p>Date: {{ transaction.created_at }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No transactions found in this section.</p>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>
