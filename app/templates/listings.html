@@ -10,7 +10,6 @@
            color: #333;
        }
 
-
        nav {
            background-color: #333;
            color: white;
@@ -21,7 +20,6 @@
            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
        }
 
-
        nav ul {
            list-style: none;
            margin: 0;
@@ -31,11 +29,9 @@
            align-items: center;
        }
 
-
        nav li {
            margin: 0 15px;
        }
-
 
        nav a {
            color: white;
@@ -45,11 +41,9 @@
            transition: color 0.3s ease;
        }
 
-
        nav a:hover {
            color: #007BFF;
        }
-
 
        header {
            background-color: #333;
@@ -58,11 +52,9 @@
            text-align: center;
        }
 
-
        header h1 {
            margin: 0;
        }
-
 
        .container {
            margin: 30px auto;
@@ -70,39 +62,42 @@
            padding: 20px;
        }
 
-
        .search-bar {
            margin-bottom: 20px;
+       }
+
+       .search-bar-row {
            display: flex;
            justify-content: center;
+           flex-wrap: wrap;
+           gap: 10px;
+           margin-bottom: 10px;
        }
 
-
-       .search-bar input[type="text"] {
-           padding: 15px; /* Increased padding for larger input */
-           width: 400px; /* Increased width */
+       .search-bar input[type="text"],
+       .search-bar input[type="number"],
+       .search-bar select {
+           padding: 10px;
+           width: 250px;
            border: 1px solid #ddd;
-           border-radius: 5px 0 0 5px;
-           font-size: 1.2em; /* Slightly larger font */
+           border-radius: 5px;
+           font-size: 1em;
        }
-
 
        .search-bar button {
-           padding: 15px 20px; /* Increased padding for better alignment */
+           padding: 10px 20px;
            background-color: #007BFF;
            color: white;
            border: none;
-           border-radius: 0 5px 5px 0;
-           font-size: 1.2em; /* Slightly larger font */
+           border-radius: 5px;
+           font-size: 1em;
            cursor: pointer;
            transition: background-color 0.3s ease;
        }
 
-
        .search-bar button:hover {
            background-color: #0056b3;
        }
-
 
        .ad-card {
            display: flex;
@@ -117,7 +112,6 @@
            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
        }
 
-
        .ad-card img {
            width: 120px;
            height: 90px;
@@ -126,28 +120,23 @@
            margin-right: 20px;
        }
 
-
        .ad-details {
            flex-grow: 1;
        }
-
 
        .ad-details h3 {
            margin: 0 0 10px;
            font-size: 1.5em;
        }
 
-
        .ad-details p {
            margin: 5px 0;
        }
-
 
        .ad-details .price {
            font-weight: bold;
            color: #007BFF;
        }
-
 
        .view-details {
            background-color: #007BFF;
@@ -160,11 +149,9 @@
            transition: background-color 0.3s ease;
        }
 
-
        .view-details:hover {
            background-color: #0056b3;
        }
-
 
        .add-ad {
            display: block;
@@ -178,11 +165,9 @@
            width: fit-content;
        }
 
-
        .add-ad:hover {
            background-color: #218838;
        }
-
 
        .no-results {
            text-align: center;
@@ -209,8 +194,34 @@
    <div class="container">
        <div class="search-bar">
            <form method="GET" action="{{ url_for('listing_routes.search_ads') }}">
-               <input type="text" name="query" placeholder="Search ads by title, brand, or model..." value="{{ search_query if is_search else '' }}">
-               <button type="submit">Search</button>
+               <!-- Top Row: Search Field -->
+               <div class="search-bar-row">
+                   <input type="text" name="query" placeholder="Search ads by title, brand, or model..." value="{{ search_query if is_search else '' }}">
+               </div>
+               <!-- Second Row: Filters -->
+               <div class="search-bar-row">
+                   <input type="number" name="min_price" placeholder="Min Price" value="{{ request.args.get('min_price', '') }}">
+                   <input type="number" name="max_price" placeholder="Max Price" value="{{ request.args.get('max_price', '') }}">
+                   <input type="number" name="min_year" placeholder="Min Year" value="{{ request.args.get('min_year', '') }}">
+                   <input type="number" name="max_year" placeholder="Max Year" value="{{ request.args.get('max_year', '') }}">
+                   <select name="fuel_type">
+                       <option value="">Fuel Type</option>
+                       <option value="Petrol" {% if request.args.get('fuel_type') == 'Petrol' %}selected{% endif %}>Petrol</option>
+                       <option value="Diesel" {% if request.args.get('fuel_type') == 'Diesel' %}selected{% endif %}>Diesel</option>
+                       <option value="Electric" {% if request.args.get('fuel_type') == 'Electric' %}selected{% endif %}>Electric</option>
+                       <option value="Hybrid" {% if request.args.get('fuel_type') == 'Hybrid' %}selected{% endif %}>Hybrid</option>
+                   </select>
+                   <select name="car_condition">
+                       <option value="">Condition</option>
+                       <option value="no damage" {% if request.args.get('car_condition') == 'no damage' %}selected{% endif %}>No Damage</option>
+                       <option value="damaged" {% if request.args.get('car_condition') == 'damaged' %}selected{% endif %}>Damaged</option>
+                       <option value="heavily damaged" {% if request.args.get('car_condition') == 'heavily damaged' %}selected{% endif %}>Heavily Damaged</option>
+                   </select>
+               </div>
+               <!-- Third Row: Search Button -->
+               <div class="search-bar-row">
+                   <button type="submit">Search</button>
+               </div>
            </form>
        </div>
        {% if not is_search %}

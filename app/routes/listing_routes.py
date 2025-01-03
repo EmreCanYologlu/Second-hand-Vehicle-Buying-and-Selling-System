@@ -927,52 +927,106 @@ def view_ad_details(ad_id):
 
 @listing_routes.route('/search', methods=['GET', 'POST'])
 def search_ads():
-   # Ensure the user is logged in
-   if 'user_id' not in session:
-       flash('You need to log in first!', 'danger')
-       return redirect(url_for('auth_routes.login'))
+    # Ensure the user is logged in
+    if 'user_id' not in session:
+        flash('You need to log in first!', 'danger')
+        return redirect(url_for('auth_routes.login'))
+
+    # Retrieve search and filter parameters
+    query = request.args.get('query', '')  # Search query
+    min_price = request.args.get('min_price', None)
+    max_price = request.args.get('max_price', None)
+    min_year = request.args.get('min_year', None)
+    max_year = request.args.get('max_year', None)
+    fuel_type = request.args.get('fuel_type', None)
+    car_condition = request.args.get('car_condition', None)
+
+    try:
+        db = get_db_connection()
+        cursor = db.cursor(dictionary=True)
+
+        # Base SQL query
+        sql_query = """
+            SELECT
+                VehicleAd.ad_id,
+                VehicleAd.title,
+                VehicleAd.description,
+                VehicleAd.price,
+                Vehicle.brand,
+                Vehicle.model,
+                Vehicle.year,
+                Vehicle.fuel_type,
+                Vehicle.car_condition,
+                Photo.content AS photo_url
+            FROM
+                VehicleAd
+            JOIN
+                Vehicle ON VehicleAd.vehicle_id = Vehicle.vehicle_id
+            LEFT JOIN
+                Photo ON Vehicle.vehicle_id = Photo.vehicle_id AND Photo.is_primary = 1
+            WHERE
+                VehicleAd.status = 'available'
+        """
+
+        # Add search conditions
+        search_conditions = []
+        if query:
+            search_conditions.append("(VehicleAd.title LIKE %s OR Vehicle.brand LIKE %s OR Vehicle.model LIKE %s)")
+
+        # Add filter conditions
+        filter_conditions = []
+        if min_price:
+            filter_conditions.append("VehicleAd.price >= %s")
+        if max_price:
+            filter_conditions.append("VehicleAd.price <= %s")
+        if min_year:
+            filter_conditions.append("Vehicle.year >= %s")
+        if max_year:
+            filter_conditions.append("Vehicle.year <= %s")
+        if fuel_type:
+            filter_conditions.append("Vehicle.fuel_type = %s")
+        if car_condition:
+            filter_conditions.append("Vehicle.car_condition = %s")
+
+        # Combine conditions
+        conditions = search_conditions + filter_conditions
+        if conditions:
+            sql_query += " AND " + " AND ".join(conditions)
+
+        # Prepare query parameters
+        params = []
+        if query:
+            like_query = f"%{query}%"
+            params.extend([like_query, like_query, like_query])
+        if min_price:
+            params.append(min_price)
+        if max_price:
+            params.append(max_price)
+        if min_year:
+            params.append(min_year)
+        if max_year:
+            params.append(max_year)
+        if fuel_type:
+            params.append(fuel_type)
+        if car_condition:
+            params.append(car_condition)
+
+        # Execute query
+        cursor.execute(sql_query, params)
+        search_results = cursor.fetchall()
+
+        return render_template('listings.html', results=search_results)
+
+    except mysql.connector.Error as err:
+        flash(f'Error: {err}', 'danger')
+        return redirect(url_for('auth_routes.dashboard'))
+
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'db' in locals():
+            db.close()
 
 
-   query = request.args.get('query', '')  # Get search query from GET request
-   try:
-       db = get_db_connection()
-       cursor = db.cursor(dictionary=True)
 
 
-       # Fetch listings matching the search query
-       sql_query = """
-           SELECT
-               VehicleAd.ad_id,
-               VehicleAd.title,
-               VehicleAd.description,
-               VehicleAd.price,
-               Vehicle.brand,
-               Vehicle.model,
-               Vehicle.year,
-               Photo.content AS photo_url
-           FROM
-               VehicleAd
-           JOIN
-               Vehicle ON VehicleAd.vehicle_id = Vehicle.vehicle_id
-           LEFT JOIN
-               Photo ON Vehicle.vehicle_id = Photo.vehicle_id AND Photo.is_primary = 1
-           WHERE
-               VehicleAd.status = 'available' AND
-               (VehicleAd.title LIKE %s OR VehicleAd.description LIKE %s)
-       """
-       like_query = f"%{query}%"
-       cursor.execute(sql_query, (like_query, like_query))
-       search_results = cursor.fetchall()
-
-
-       return render_template('listings.html', results=search_results)
-
-
-   except mysql.connector.Error as err:
-       flash(f'Error: {err}', 'danger')
-       return redirect(url_for('auth_routes.dashboard'))
-   finally:
-       if 'cursor' in locals():
-           cursor.close()
-       if 'db' in locals():
-           db.close()
