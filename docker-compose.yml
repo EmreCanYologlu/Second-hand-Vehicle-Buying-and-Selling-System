@@ -3,7 +3,7 @@ services:
     build:
       context: .  # Build context is the root directory
     ports:
-      - "5000:5000"  # Expose port 5000 on the host
+      - "8000:5000"  # Expose port 5000 on the host
     volumes:
       - .:/app  # Mount the project directory into the container for development
     environment:

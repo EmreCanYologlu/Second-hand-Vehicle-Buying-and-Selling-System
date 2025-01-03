@@ -68,9 +68,16 @@ def login():
             user = cursor.fetchone()
 
             if user:
+
+                # Check if the user is an admin
+                admin_check_query = "SELECT 1 FROM Admin WHERE user_id = %s"
+                cursor.execute(admin_check_query, (user['user_id'],))
+                is_admin = cursor.fetchone() is not None
+
                 # Set session variables
                 session['user_id'] = user['user_id']
                 session['username'] = user['username']
+                session['is_admin'] = is_admin  # True if the user is an admin
                 flash('Login successful!', 'success')
                 return redirect(url_for('listing_routes.view_listings'))
             else:
