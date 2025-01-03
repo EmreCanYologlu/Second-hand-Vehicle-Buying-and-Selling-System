@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Bids</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            margin: 30px auto;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .bids-section {
+            margin-bottom: 40px;
+        }
+
+        .bids-section h2 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        .bid-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bid-card img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .bid-details {
+            flex-grow: 1;
+        }
+
+        .bid-details h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+        }
+
+        .bid-details p {
+            margin: 5px 0;
+        }
+
+        .bid-details .status {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions .make-another-bid {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .actions .make-another-bid:hover {
+            background-color: #218838;
+        }
+
+        .actions .buy {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .actions .buy:hover {
+            background-color: #0056b3;
+        }
+
+        .actions .reject {
+            background-color: red;
+            color: white;
+        }
+
+        .actions .reject:hover {
+            background-color: darkred;
+        }
+
+        .actions .counter-offer,
+        .actions .approve {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .actions .counter-offer:hover,
+        .actions .approve:hover {
+            background-color: #0056b3;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .popup-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .popup-content button {
+            margin: 10px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .confirm {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .confirm:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel {
+            background-color: gray;
+            color: white;
+        }
+
+        .cancel:hover {
+            background-color: darkgray;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function openRejectPopup(bidId) {
+            const form = document.getElementById('reject-form');
+            form.action = `/bidding/reject_bid/${bidId}`;  // Add /bidding prefix
+            document.getElementById('reject-popup').style.display = 'block'; // Show the popup
+        }
+        
+        function closeRejectPopup() {
+            document.getElementById('reject-popup').style.display = 'none'; // Hide the popup
+        }
+
+        function openMakeAnotherBidPopup(bidId) {
+            const form = document.getElementById('make-another-bid-form');
+            form.action = `/bidding/make_another_bid/${bidId}`;
+            document.getElementById('make-another-bid-popup').style.display = 'block';
+        }
+
+        function closeMakeAnotherBidPopup() {
+            document.getElementById('make-another-bid-popup').style.display = 'none';
+        }
+
+        function openCounterOfferPopup(bidId) {
+            const form = document.getElementById('counter-offer-form');
+            form.action = `/bidding/counter_offer/${bidId}`;
+            document.getElementById('counter-offer-popup').style.display = 'block';
+        }
+        
+        function closeCounterOfferPopup() {
+            document.getElementById('counter-offer-popup').style.display = 'none';
+        }
+
+        function openApprovePopup(bidId) {
+            const form = document.getElementById('approve-form');
+            form.action = `/bidding/approve_bid/${bidId}`;
+            document.getElementById('approve-popup').style.display = 'block';
+        }
+        
+        function closeApprovePopup() {
+            document.getElementById('approve-popup').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('listing_routes.view_listings') }}">Listings</a></li>
+            <li><a href="{{ url_for('listing_routes.view_mylistings') }}">My Ads</a></li>
+            <li><a href="{{ url_for('messaging_routes.view_conversations') }}">Messages</a></li>
+            <li><a href="{{ url_for('notification_routes.view_notifications') }}">Notifications</a></li>
+            <li><a href="{{ url_for('bidding_routes.view_wallet') }}">Wallet</a></li>
+            <li><a href="{{ url_for('bidding_routes.view_my_bids') }}">My Bids</a></li>
+            <li><a href="{{ url_for('bidding_routes.view_transactions') }}">Transactions</a></li>
+            <li><a href="{{ url_for('auth_routes.dashboard') }}">Dashboard</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>My Bids</h1>
+    </header>
+    {% with messages = get_flashed_messages(with_categories = True)%}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <div class="bids-section">
+            <h2>Bids You Made</h2>
+            {% if user_bids %}
+                {% for bid in user_bids %}
+                <div class="bid-card">
+                    <img src="{{ bid.photo_url if bid.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
+                    <div class="bid-details">
+                        <h3>{{ bid.title }}</h3>
+                        <p>Seller: {{ bid.seller_username }}</p>
+                        <p>Bid Amount: ${{ bid.amount }}</p>
+                        <p class="status">Status: {{ bid.status }}</p>
+                        {% if bid.counter_bid %}
+                            <p>Counter Offer: ${{ bid.counter_bid }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="actions">
+                        {% if bid.status == 'rejected' and not bid.has_waiting_bid and not bid.has_approved_bid %}
+                            <button class="make-another-bid" onclick="openMakeAnotherBidPopup({{ bid.ad_id }})">Make Another Bid</button>
+                        {% elif bid.status == 'approved' and bid.ad_status == 'available' %}
+                            <a href="{{ url_for('bidding_routes.confirm_transaction', bid_id=bid.bid_id) }}" class="buy">Buy</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No bids made yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="bids-section">
+            <h2>Bids on Your Ads</h2>
+            {% if user_ads_bids %}
+                {% for bid in user_ads_bids %}
+                <div class="bid-card">
+                    <img src="{{ bid.photo_url if bid.photo_url else '/static/default_photo.jpg' }}" alt="Ad Photo">
+                    <div class="bid-details">
+                        <h3>{{ bid.title }}</h3>
+                        <p>Bidder: {{ bid.bidder_username }}</p>
+                        <p>Bid Amount: ${{ bid.amount }}</p>
+                        <p class="status">Status: {{ bid.status }}</p>
+                    </div>
+                    <div class="actions">
+                        {% if bid.status == 'waiting' %}
+                            <button class="reject" onclick="openRejectPopup({{bid.bid_id}})">Reject</button>
+                            <button class="counter-offer"  onclick="openCounterOfferPopup({{ bid.bid_id }})">Counter Offer</button>
+                            <button class="approve" onclick="openApprovePopup({{ bid.bid_id }})">Approve</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No bids on your ads yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="reject-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeRejectPopup()">&times;</span>
+            <h3>Are you sure you want to reject this bid?</h3>
+            <form id="reject-form" method="POST">
+                <button type="submit" class="confirm">Yes, Reject</button>
+                <button type="button" class="cancel" onclick="closeRejectPopup()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="make-another-bid-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeMakeAnotherBidPopup()">&times;</span>
+            <h3>Make Another Bid</h3>
+            <form id="make-another-bid-form" method="POST">
+                <label for="bid_amount">Bid Amount:</label>
+                <input type="number" id="bid_amount" name="bid_amount" required>
+                <button type="submit" class="confirm">Submit Bid</button>
+                <button type="button" class="cancel" onclick="closeMakeAnotherBidPopup()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="counter-offer-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeCounterOfferPopup()">&times;</span>
+            <h3>Make a Counter Offer</h3>
+            <form id="counter-offer-form" method="POST">
+                <label for="counter_offer">Counter Offer Amount:</label>
+                <input type="number" id="counter_offer" name="counter_offer" required>
+                <button type="submit" class="confirm">Submit Counter Offer</button>
+                <button type="button" class="cancel" onclick="closeCounterOfferPopup()">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="approve-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeApprovePopup()">&times;</span>
+            <h3>Are you sure you want to approve this bid?</h3>
+            <form id="approve-form" method="POST">
+                <button type="submit" class="confirm">Yes, Approve</button>
+                <button type="button" class="cancel" onclick="closeApprovePopup()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
